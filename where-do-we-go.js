@@ -4,40 +4,55 @@ let nameElement = null;
 export const explore = () => {
 
   const sortedPlaces = sort()
+
+  let namediv = document.createElement('div')
+  namediv.className = "direction"
+  document.body.append(namediv)
+
+
   console.log(sections);
-  
+  nameElement = document.createElement('a')
+  nameElement.className = "location"
+  nameElement.target = '_blank'
+  nameElement.href = `https://www.google.com/maps/place/${places[0].coordinates}`
+  nameElement.textContent = places[0].name + '\n' + places[0].coordinates
+  nameElement.style.color = places[0].color
+  document.body.append(nameElement)
+let previousScrollY = null
   addEventListener("scroll", (event) => {
     const scrollY = window.scrollY;
-
-    // Check each section to see if it's at the end
+    
+    if (scrollY < (previousScrollY || 0)) {
+      document.querySelector(".direction").innerHTML = "N";
+    } else {
+      document.querySelector(".direction").innerHTML = "S";
+    }
+ 
+    previousScrollY = scrollY;
     sections.forEach((section, index) => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
-
-        // Check if we are at the bottom of the current section
         if (scrollY >= sectionTop + (sectionHeight/2) - window.innerHeight) {
           if (nameElement) {
             nameElement.remove();
           }
-            //  console.log(`Reached the end of section ${index + 1}: ${section.textContent}`);
                nameElement = document.createElement('a')
   nameElement.className = "location"
-  nameElement.textContent = places[index].name
+  nameElement.href = `https://www.google.com/maps/place/${places[index].coordinates}`
+  nameElement.textContent = places[index].name + '\n' + places[index].coordinates
+  nameElement.style.color = places[index].color
+   nameElement.target = '_blank'
+  
   document.body.append(nameElement)
         }
       });
   })
 
-  // const nameElement = document.createElement('a')
-  // nameElement.className = "location"
-  // nameElement.textContent = "soufian"
-  // document.body.append(nameElement)
-    
   sortedPlaces.forEach(place => {
       const section = document.createElement('section');
       const firstPart = place.name.split(",")[0].trim();
       section.style.backgroundImage = `url('${firstPart.toLowerCase().replace(/\s+/g, '-')}.jpg')`
-;
+
       section.style.backgroundSize = 'cover';
       section.style.backgroundPosition = 'center';
       section.className = "section"
@@ -47,9 +62,6 @@ export const explore = () => {
       sections.push(section);
       document.body.appendChild(section);
     });
-
-      
-    
   };
 
   const sort = () => {
