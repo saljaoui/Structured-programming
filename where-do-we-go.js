@@ -23,9 +23,9 @@ let previousScrollY = null
     const scrollY = window.scrollY;
     
     if (scrollY < (previousScrollY || 0)) {
-      document.querySelector(".direction").innerHTML = "N";
+      document.querySelector(".direction").innerHTML =  "&#8593;"+ '\n' + "N";
     } else {
-      document.querySelector(".direction").innerHTML = "S";
+      document.querySelector(".direction").innerHTML = "&#8595;"+ '\n' + "S";
     }
  
     previousScrollY = scrollY;
